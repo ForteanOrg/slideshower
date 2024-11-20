@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKKU presentatie</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+        }
+        .viewer-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .media-item {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .active {
+            display: block;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            width: 50px;
+            height: 50px;
+            margin-top: -25px;
+            background-color: rgba(255, 255, 255, 0.5);
+            color: black;
+            text-align: center;
+            line-height: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .arrow-left {
+            left: 0;
+        }
+        .arrow-right {
+            right: 0;
+        }
+        .viewer-container:hover .arrow {
+            display: block;
+        }
+        .arrow:hover {
+            opacity: 1;
+        }
+        .viewer-container .arrow {
+            opacity: 0;
+        }
+        .viewer-container .arrow:hover {
+            opacity: 1;
+        }
+        .filename-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="viewer-container">
+        <div class="arrow arrow-left" onclick="prevMedia()">◀️</div>
+        <div class="arrow arrow-right" onclick="nextMedia()">▶️</div>
+<img src="mopix/1a.jpg" class="media-item active" alt="">
+<img src="mopix/1b.jpg" class="media-item" alt="">
+<img src="mopix/1c.jpg" class="media-item" alt="">
+<img src="mopix/2a.JPG" class="media-item" alt="">
+<img src="mopix/2b.JPG" class="media-item" alt="">
+<img src="mopix/3.JPG" class="media-item" alt="">
+<img src="mopix/4.jpg" class="media-item" alt="">
+<img src="mopix/5.jpg" class="media-item" alt="">
+<img src="mopix/6a.JPG" class="media-item" alt="">
+<img src="mopix/6b.JPG" class="media-item" alt="">
+<img src="mopix/6c.JPG" class="media-item" alt="">
+<img src="mopix/6d.JPG" class="media-item" alt="">
+<video src="mopix/7a.mp4" class="media-item " controls></video>
+<video src="mopix/7b.mp4" class="media-item " controls></video>
+<video src="mopix/7c.mp4" class="media-item " controls></video>
+<video src="mopix/7d.mp4" class="media-item " controls></video>
+<video src="mopix/8a.mp4" class="media-item " controls></video>
+<video src="mopix/8b.mp4" class="media-item " controls></video>
+<img src="mopix/9a.jpg" class="media-item" alt="">
+<img src="mopix/9b.jpg" class="media-item" alt="">
+<img src="mopix/9c.jpg" class="media-item" alt="">
+<img src="mopix/10a.jpg" class="media-item" alt="">
+<img src="mopix/10b.JPG" class="media-item" alt="">
+<img src="mopix/11.jpg" class="media-item" alt="">
+<video src="mopix/12.mp4" class="media-item " controls></video>
+<img src="mopix/13a.JPG" class="media-item" alt="">
+<img src="mopix/13b.jpg" class="media-item" alt="">
+<img src="mopix/13c.jpg" class="media-item" alt="">
+<video src="mopix/14c.mp4" class="media-item " controls></video>
+<img src="mopix/14extra.JPG" class="media-item" alt="">
+<img src="mopix/15a.jpg" class="media-item" alt="">
+<img src="mopix/15b.jfif" class="media-item" alt="">
+<img src="mopix/16a.jpeg" class="media-item" alt="">
+<img src="mopix/16b.jpg" class="media-item" alt="">
+<img src="mopix/17a.jpg" class="media-item" alt="">
+<img src="mopix/17b.JPG" class="media-item" alt="">
+<img src="mopix/17c.JPG" class="media-item" alt="">
+<img src="mopix/17d.JPG" class="media-item" alt="">
+<video src="mopix/18a.mp4" class="media-item " controls></video>
+<video src="mopix/18b.mp4" class="media-item " controls></video>
+<video src="mopix/18c.mp4" class="media-item " controls></video>
+<img src="mopix/19a.jpg" class="media-item" alt="">
+<img src="mopix/19b.jpg" class="media-item" alt="">
+<img src="mopix/19c.jpg" class="media-item" alt="">
+<img src="mopix/19d.jpg" class="media-item" alt="">
+<video src="mopix/19e.oliemolen-werkend.mp4" class="media-item " controls></video>
+<img src="mopix/25.jpg" class="media-item" alt="">
+<img src="mopix/26a.jpeg" class="media-item" alt="">
+<img src="mopix/26b.jpg" class="media-item" alt="">
+<img src="mopix/26c.jpeg" class="media-item" alt="">
+<img src="mopix/27.gif" class="media-item" alt="">
+        <!-- Add more images/videos as needed -->
+
+        <div id="filename" class="filename-display"></div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const mediaItems = document.querySelectorAll('.media-item');
+        const filenameDisplay = document.getElementById('filename');
+
+        function updateMediaDisplay() {
+            mediaItems.forEach((item, index) => {
+                if (index === currentIndex) {
+                    item.classList.add('active');
+                    showFilename(item.src);
+                    if (item.tagName === 'VIDEO') {
+                        item.play();
+                    }
+                } else {
+                    item.classList.remove('active');
+                    if (item.tagName === 'VIDEO') {
+                        item.pause();
+                        item.currentTime = 0;
+                    }
+                }
+            });
+        }
+
+        function prevMedia() {
+            currentIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
+            updateMediaDisplay();
+        }
+
+        function nextMedia() {
+            currentIndex = (currentIndex + 1) % mediaItems.length;
+            updateMediaDisplay();
+        }
+
+        function goHome() {
+            currentIndex = 0;
+            updateMediaDisplay();
+        }
+
+        function showFilename(src) {
+            const filename = src.split('/').pop();
+            filenameDisplay.textContent = filename;
+            filenameDisplay.style.opacity = 1;
+            setTimeout(() => {
+                filenameDisplay.style.opacity = 0;
+            }, 3000);
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowUp') {
+                prevMedia();
+            } else if (event.key === 'ArrowDown') {
+                nextMedia();
+            } else if (event.key === 'PageDown') {
+                nextMedia();
+            } else if (event.key === 'PageUp') {
+                prevMedia();
+            } else if (event.key === 'ArrowLeft') {
+		prevMedia();
+            } else if (event.key === 'ArrowRight') {
+		nextMedia();
+            } else if (event.key === 'Home') {
+		goHome();
+            }
+        });
+	document.addEventListener('dblclick', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    document.body.style.cursor = 'none';
+                });
+            } else {
+                document.exitFullscreen().then(() => {
+                    document.body.style.cursor = 'default';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
